@@ -24,6 +24,8 @@ public class SwerveModule {
     private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
 
+    // This class is the one for each swerve module
+    // Initialized with: two motors with relative encoders, an absolute encoder, and a pid controller
     public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
             int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
 
@@ -51,6 +53,7 @@ public class SwerveModule {
         resetEncoders();
     }
 
+    // Get value from encodere
     public double getDrivePosition() {
         return driveEncoder.getPosition();
     }
@@ -67,6 +70,7 @@ public class SwerveModule {
         return turningEncoder.getVelocity();
     }
 
+    // This gets the rotation of the absolute encoder in radians
     public double getAbsoluteEncoderRad() {
         double angle = absoluteEncoder.getVoltage() / RobotController.getVoltage5V();
         angle *= 2.0 * Math.PI;
@@ -74,15 +78,18 @@ public class SwerveModule {
         return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
     }
 
+    // Reset encoders back to 0
     public void resetEncoders() {
         driveEncoder.setPosition(0);
         turningEncoder.setPosition(getAbsoluteEncoderRad());
     }
 
+    // Get PHYSICAL state with speed and rotation
     public SwerveModuleState getState() {
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
     }
 
+    // Set DESIRED state with speed and rotation
     public void setDesiredState(SwerveModuleState state) {
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
             stop();
@@ -93,6 +100,7 @@ public class SwerveModule {
         turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
     }
 
+    // Stop.
     public void stop() {
         driveMotor.set(0);
         turningMotor.set(0);
