@@ -5,7 +5,7 @@
 ### Swerve
     - SDS Mk4i Modules
     - REV NEO Motors
-    - Spark Max Encoders
+    - Spark Max Motor Controllers
     - CANCoder Absolute Encoders
 
 The rest is TBD!
