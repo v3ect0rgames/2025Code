@@ -1,67 +1,42 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.IOConstants;
-import frc.robot.Commands.SwerveCmd;
-import frc.robot.Subsystems.AlgaeBalls;
-import frc.robot.Subsystems.ClimbSubSystem;
-import frc.robot.Subsystems.Coral;
-import frc.robot.Subsystems.SwerveSubsystem;
+import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.LiftSubsystem;
 
 public class RobotContainer {
 
-    private final SwerveSubsystem swerve = new SwerveSubsystem();
-    private final AlgaeBalls algae = new AlgaeBalls();
-    private final Coral coral = new Coral();
-    private final ClimbSubSystem climb = new ClimbSubSystem();
+  private final XboxController controller = new XboxController(OIConstants.kDriverControllerPort);
 
-    private final XboxController controller = new XboxController(IOConstants.kDriverControllerPort);
+  private final ClimbSubsystem climb = new ClimbSubsystem();
+  private final LiftSubsystem lift = new LiftSubsystem();
 
-    private final SendableChooser<Command> m_chooser = new SendableChooser<Command>();
+  public RobotContainer() {
+    configureBindings();
+  }
 
-    public RobotContainer() {
+  private void configureBindings() {
+    new JoystickButton(controller, XboxController.Button.kX.value)
+      .onTrue(new InstantCommand(() -> climb.up(), climb))
+      .onFalse(new InstantCommand(() -> climb.stop(), climb));
+    new JoystickButton(controller, XboxController.Button.kB.value)
+      .onTrue(new InstantCommand(() -> climb.down(), climb))
+      .onFalse(new InstantCommand(() -> climb.stop(), climb));
 
-        m_chooser.setDefaultOption("Middle", new InstantCommand());
-        m_chooser.addOption("right", new InstantCommand());
-        m_chooser.addOption("left", new InstantCommand());
-        SmartDashboard.putData(m_chooser);
+    new POVButton(controller, 0)
+      .onTrue(new InstantCommand(() -> lift.up(), lift))
+      .onFalse(new InstantCommand(() -> lift.stop(), lift));
+    new POVButton(controller, 180)
+      .onTrue(new InstantCommand(() -> lift.down(), lift))
+      .onFalse(new InstantCommand(() -> lift.stop(), lift));
+  }
 
-        configureBindings();
-    }
-
-    private void configureBindings() {
-        // Into the swerve subsystem, pass the swerve command (new SwerveCmd) with three inputs: left stick y, left stick x, and right stick x
-        swerve.setDefaultCommand(new SwerveCmd(swerve,
-                    () -> -controller.getLeftY(),
-                    () -> -controller.getLeftX(),
-                    () -> controller.getRightX())
-        );
-
-        new JoystickButton(controller, XboxController.Button.kLeftBumper.value)
-            .onTrue(new InstantCommand(() -> algae.setThrowSpeed(), algae));
-        new JoystickButton(controller, XboxController.Button.kRightBumper.value)
-            .onTrue(new InstantCommand(() -> algae.setPickUpSpeed(), algae));
-
-        new POVButton(controller, 0).onTrue(new InstantCommand(() -> coral.setUpSpeed(), coral));
-        new POVButton(controller, 180).onTrue(new InstantCommand(() -> coral.setDownSpeed(), coral));
-
-        new Trigger(() -> controller.getRightTriggerAxis() > 0.5)
-            .onTrue(new InstantCommand(() -> coral.setThrowCoral(), coral));
-        new Trigger(() -> controller.getLeftTriggerAxis() > 0.5)
-            .onTrue(new InstantCommand(() -> coral.setPickCoral(), coral));
-
-        new JoystickButton(controller, XboxController.Button.kA.value)
-            .onTrue(new InstantCommand(()-> climb.toggle(), climb));
-    }
-
-    public Command getAutonomousCommand() {
-        return null;
-    }
+  public Command getAutonomousCommand() {
+    return null;
+  }
 }

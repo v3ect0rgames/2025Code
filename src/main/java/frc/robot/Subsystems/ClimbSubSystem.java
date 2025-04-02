@@ -1,26 +1,24 @@
-package frc.robot.Subsystems;
+package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ClimbSubSystem extends SubsystemBase{
-    private final static SparkMax ClimbMotor = new SparkMax(0,MotorType.kBrushless);
-    private final RelativeEncoder climbEncoder = ClimbMotor.getEncoder();
-    private final double upRad = Math.PI/2; 
-    private final double speed = 0.4;
-    private final double downRad = Math.PI;
-    public void toggle() {
-        if (climbEncoder.getPosition() == upRad){ //if up is true write it here
-            ClimbMotor.set(speed);
+public class ClimbSubsystem extends SubsystemBase{
 
-        } else if (climbEncoder.getPosition() == downRad) {
-            ClimbMotor.set(-speed);
-        
+    private final SparkMax motor = new SparkMax(11, MotorType.kBrushless);
+    private final static double speed = 0.4;
 
-        }
+    public void up() {
+        motor.set(speed);
     }
-    
+
+    public void down() {
+        motor.set(-speed);
+    }
+
+    public void stop() {
+        motor.set(0);
+    }
 }
