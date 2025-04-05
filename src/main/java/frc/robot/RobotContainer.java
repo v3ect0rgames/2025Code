@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.ClimbSubsystem;
-import frc.robot.subsystems.LiftSubsystem;
+import frc.robot.Subsystems.ClimbSubsystem;
+import frc.robot.Subsystems.LiftSubsystem;
 
 public class RobotContainer {
 

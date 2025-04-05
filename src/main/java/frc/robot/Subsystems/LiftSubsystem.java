@@ -1,5 +1,5 @@
 
-package frc.robot.subsystems;
+package frc.robot.Subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
