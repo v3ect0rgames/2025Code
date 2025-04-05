@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ClimbSubsystem extends SubsystemBase{
 
     private final SparkMax motor = new SparkMax(11, MotorType.kBrushless);
-    private final static double speed = 0.4;
+    private final static double speed = 0.7;
 
     public void up() {
         motor.set(speed);

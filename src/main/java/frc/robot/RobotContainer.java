@@ -11,6 +11,7 @@ import frc.robot.Constants.IOConstants;
 import frc.robot.Commands.DriveAuto;
 import frc.robot.Commands.SwerveCmd;
 import frc.robot.Subsystems.ClimbSubsystem;
+import frc.robot.Subsystems.CoralSubsystem;
 import frc.robot.Subsystems.LiftSubsystem;
 import frc.robot.Subsystems.SwerveSubsystem;
 
@@ -20,12 +21,13 @@ public class RobotContainer {
 
   private final ClimbSubsystem m_climb = new ClimbSubsystem();
   private final LiftSubsystem m_lift = new LiftSubsystem();
+  private final CoralSubsystem m_coral = new CoralSubsystem();
   private final SwerveSubsystem m_drive = new SwerveSubsystem();
 
   private final SendableChooser<Command> m_chooser = new SendableChooser<Command>();
 
   public RobotContainer() {
-    m_chooser.setDefaultOption("DRIVE ONLY", new DriveAuto());
+    m_chooser.setDefaultOption("DRIVE ONLY", new DriveAuto(m_drive));
     SmartDashboard.putData(m_chooser);
     
     configureBindings();
@@ -52,9 +54,23 @@ public class RobotContainer {
     new POVButton(m_controller, 180)
       .onTrue(new InstantCommand(() -> m_lift.down(), m_lift))
       .onFalse(new InstantCommand(() -> m_lift.stop(), m_lift));
+
+      new POVButton(m_controller, 90)
+      .onTrue(new InstantCommand(() -> m_coral.up(), m_coral))
+      .onFalse(new InstantCommand(() -> m_coral.stopTurn(), m_coral));
+    new POVButton(m_controller, 270)
+      .onTrue(new InstantCommand(() -> m_coral.down(), m_coral))
+      .onFalse(new InstantCommand(() -> m_coral.stopTurn(), m_coral));;
+  
+    new JoystickButton(m_controller, XboxController.Button.kRightBumper.value)
+      .onTrue(new InstantCommand(() -> m_coral.shoot(), m_coral))
+      .onFalse(new InstantCommand(() -> m_coral.stopCoral(), m_coral));
+    new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value)
+      .onTrue(new InstantCommand(() -> m_coral.intake(), m_coral))
+      .onFalse(new InstantCommand(() -> m_coral.stopCoral(), m_coral));
   }
 
   public Command getAutonomousCommand() {
-    return m_chooser.getSelected();
+    return new DriveAuto(m_drive);
   }
 }

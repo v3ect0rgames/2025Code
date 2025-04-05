@@ -57,7 +57,7 @@ public class SwerveModule extends SubsystemBase{
             steerMotor = new SparkMax(steerMotorID, MotorType.kBrushless);
             SparkMaxConfig steerConfig = new SparkMaxConfig();
             steerConfig.idleMode(IdleMode.kBrake);
-            steerConfig.smartCurrentLimit(20);
+            steerConfig.smartCurrentLimit(40);
             steerMotor.configure(steerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
             // module encoder
             moduleEncoder = new CANcoder(encoderID);

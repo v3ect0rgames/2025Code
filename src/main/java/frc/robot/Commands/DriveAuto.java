@@ -8,9 +8,15 @@ import frc.robot.Subsystems.SwerveSubsystem;
 
 public class DriveAuto extends Command {
 
-        private final SwerveSubsystem m_drive = new SwerveSubsystem();
+        private SwerveSubsystem m_drive;
         private final Timer m_timer = new Timer();
         private double startTime;
+
+        public DriveAuto(SwerveSubsystem m_drive) {
+            this.m_drive = m_drive;
+            m_timer.reset();
+            m_timer.start();
+        }
 
         public void initialize() {
             startTime = m_timer.get();
@@ -18,18 +24,19 @@ public class DriveAuto extends Command {
      
         public void execute() {
             m_drive.setModuleStates(new SwerveModuleState[]{
-                new SwerveModuleState(0.1, new Rotation2d(0)),
-                new SwerveModuleState(0.1, new Rotation2d(0)),
-                new SwerveModuleState(0.1, new Rotation2d(0)),
-                new SwerveModuleState(0.1, new Rotation2d(0)),
+                new SwerveModuleState(2, new Rotation2d(0)),
+                new SwerveModuleState(2, new Rotation2d(0)),
+                new SwerveModuleState(2, new Rotation2d(0)),
+                new SwerveModuleState(2, new Rotation2d(0)),
             });
         }
      
         public boolean isFinished() {
-            return m_timer.get() - startTime >= 2;
+            return m_timer.get() - startTime >= 3.5;
         }
      
         protected void end() {
+            m_timer.reset();
             m_drive.setModuleStates(new SwerveModuleState[]{
                 new SwerveModuleState(0, new Rotation2d(0)),
                 new SwerveModuleState(0, new Rotation2d(0)),
