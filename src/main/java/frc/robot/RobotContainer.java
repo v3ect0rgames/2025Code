@@ -1,14 +1,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.IOConstants;
-import frc.robot.Commands.DriveAuto;
 import frc.robot.Commands.SwerveCmd;
 import frc.robot.Subsystems.ClimbSubsystem;
 import frc.robot.Subsystems.CoralSubsystem;
@@ -24,12 +21,8 @@ public class RobotContainer {
   private final CoralSubsystem m_coral = new CoralSubsystem();
   private final SwerveSubsystem m_drive = new SwerveSubsystem();
 
-  private final SendableChooser<Command> m_chooser = new SendableChooser<Command>();
 
-  public RobotContainer() {
-    m_chooser.setDefaultOption("DRIVE ONLY", new DriveAuto(m_drive));
-    SmartDashboard.putData(m_chooser);
-    
+  public RobotContainer() {    
     configureBindings();
   }
 
@@ -71,6 +64,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new DriveAuto(m_drive);
+    return new SwerveCmd(m_drive, () -> 0.1, () -> 0.0, () -> 0.0).withTimeout(5);
   }
 }
