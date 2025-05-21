@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.IOConstants;
 import frc.robot.Commands.SwerveCmd;
-import frc.robot.Subsystems.ClimbSubsystem;
+import frc.robot.Subsystems.ClimbSubSystem;
 import frc.robot.Subsystems.CoralSubsystem;
 import frc.robot.Subsystems.LiftSubsystem;
 import frc.robot.Subsystems.SwerveSubsystem;
@@ -16,7 +16,7 @@ public class RobotContainer {
 
   private final XboxController m_controller = new XboxController(IOConstants.kDriverControllerPort);
 
-  private final ClimbSubsystem m_climb = new ClimbSubsystem();
+  private final ClimbSubSystem m_climb = new ClimbSubSystem();
   private final LiftSubsystem m_lift = new LiftSubsystem();
   private final CoralSubsystem m_coral = new CoralSubsystem();
   private final SwerveSubsystem m_drive = new SwerveSubsystem();

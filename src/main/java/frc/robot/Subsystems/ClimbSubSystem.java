@@ -5,7 +5,7 @@ import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ClimbSubsystem extends SubsystemBase{
+public class ClimbSubSystem extends SubsystemBase{
 
     private final SparkMax motor = new SparkMax(11, MotorType.kBrushless);
     private final static double speed = 0.7;
