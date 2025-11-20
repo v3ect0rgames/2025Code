@@ -11,7 +11,7 @@
 # Descriptions of each file 
 
 ## Main.java 
-This part launches everything 
+Manages the code and launches all programs.
 ## Robot.java
 Autonomous code 
 - The autonomous code is for when the robot is not being controlled by a human
@@ -31,7 +31,8 @@ This file stores all relevant IDs.
 -  Encoders 
 -      Can Encoders each have an ID and can be configured in the Phoenix Tuner app. Each ID on the physical device must match the swerve module it is connected to in the code.
 -     As of 11/3/25, all IDs are up to date 
-
-## Unclear 
 ## Swervesubsystem.java 
-## SwerveCND.java
+This file defines all the swerve systems of the robot. It also defines and calculates several constants related to the swerve drive, and it sets base states that the swerve drive starts in and adds them to an array.
+## SwerveCMD.java
+Sets up commands for the swerve drive from the base command class. Allows control of x and y speed, as well as turning speed. This file is how the robot is able to be controlled.
+
