@@ -8,6 +8,8 @@ public final class Constants {
 
     public static final class SwerveConstants {
         public static final double kMaxMetersPerSecond = 4.6;
+        public static final double kMaxAngularSpeed = 12.0; // radians/sec
+
         
         public static final double kP = 1.5;
         public static final double kI = 0.0;
