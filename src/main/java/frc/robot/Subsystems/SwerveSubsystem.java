@@ -39,12 +39,27 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 */
 
-    public void setModuleStates(SwerveModuleState[] desiredStates) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConstants.kMaxMetersPerSecond);
-        frontRight.setTargetState(desiredStates[0]);
-        frontLeft.setTargetState(desiredStates[1]);
-        backRight.setTargetState(desiredStates[2]);
-        backLeft.setTargetState(desiredStates[3]);
+    public void setModuleStates(SwerveModuleState[] states) {
+    
+        // Normalize speeds if needed
+        SwerveDriveKinematics.desaturateWheelSpeeds(
+            states, SwerveConstants.kMaxMetersPerSecond
+        );
+    
+        // --- THE MAGIC PART ---
+        // Optimize EACH module to shortest rotation + speed flip
+        states[0] = SwerveModuleState.optimize(states[0], frontLeft.getAngle());
+        states[1] = SwerveModuleState.optimize(states[1], frontRight.getAngle());
+        states[2] = SwerveModuleState.optimize(states[2], backLeft.getAngle());
+        states[3] = SwerveModuleState.optimize(states[3], backRight.getAngle());
+    
+        // Now send optimized states to modules
+        frontLeft.setDesiredState(states[0]);
+        frontRight.setDesiredState(states[1]);
+        backLeft.setDesiredState(states[2]);
+        backRight.setDesiredState(states[3]);
+    }
+
 
 /* 
         double[] desired_states = new double[] {
@@ -71,5 +86,4 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumberArray("actual", actual_states);
 
         */
-    }
 }
