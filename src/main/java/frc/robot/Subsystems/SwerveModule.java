@@ -20,6 +20,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class SwerveModule extends SubsystemBase{
 
     //drive 
+    public Rotation2d getAngle() {
+        return Rotation2d.fromRotations(getModuleAngRotations());
+    }
+
     SparkMax driveMotor;
     int driveMotorID;
     SparkAbsoluteEncoder driveMotorEncoder;
@@ -74,18 +78,27 @@ public class SwerveModule extends SubsystemBase{
 
         }
 
-    //DRIVE//
-        public void setTargetState(SwerveModuleState targetState) {
-            //PID experement
-            //  steerMotor.set(-steerController.calculate(getModuleAngRotations(),targetState.angle.getRotations()));
-            //  driveController.setReference(targetState.speedMetersPerSecond / DRIVE_VELOCITY_CONVERSION, ControlType.kVelocity);
-
-            // FUNCTIONING
-            double currentAngle = getModuleAngRotations();
-            steerMotor.set(-steerController.calculate(currentAngle, targetState.angle.getRotations()));
-            targetState.speedMetersPerSecond *= targetState.angle.minus(new Rotation2d(currentAngle*2*Math.PI)).getCos();
-            driveMotor.set(targetState.speedMetersPerSecond/4.52); 
+        public void setTargetState(SwerveModuleState desiredState) {
+    
+            // Optimize wheel angle vs current module angle
+            Rotation2d currentAngle = getAngle();
+            SwerveModuleState optimized = SwerveModuleState.optimize(desiredState, currentAngle);
+        
+            // -------- STEERING MOTOR -------- //
+            // Convert the optimized angle (Rotation2d) to rotations (0–1)
+            double targetRotations = optimized.angle.getRotations();
+            double currentRotations = getModuleAngRotations();
+        
+            double steerOutput = steerController.calculate(currentRotations, targetRotations);
+            steerMotor.set(-steerOutput);   // your code uses inverted steering
+        
+            // -------- DRIVE MOTOR -------- //
+            double speed = optimized.speedMetersPerSecond;
+        
+            // Normalize to motor command (your 4.52 value)
+            driveMotor.set(speed / 4.52);
         }
+
 
         public double getModuleAngRotations(){
             return moduleEncoder.getAbsolutePosition().getValueAsDouble() - encoderOffsetRotations;
